@@ -1,0 +1,59 @@
+.container {
+  width: 100%;
+  position: relative;
+  border-collapse: collapse;
+}
+.content {
+  margin-top: 10px;
+  flex: 1;
+}
+
+.search-container {
+  height: 30%;
+  width: 100%;
+  padding-top: 10px;
+}
+.search-desktop {
+  padding: 12px;
+  margin-left: 2px;
+  display: block;
+  width: 95%;
+  bottom: 12px;
+}
+
+@media only screen and (max-width: 600px) {
+  .search-desktop {
+    width: 80%;
+    margin-top: 3px;
+    display: block;
+  }
+}
+@media only screen and (max-width: 412px) {
+  .search-desktop {
+    width: 80%;
+    margin-left: 3px;
+    display: block;
+  }
+}
+@media only screen and (max-width: 414px) {
+  .search-desktop {
+    width: 80%;
+    margin-left: 10px;
+    display: block;
+  }
+}
+@media only screen and (max-width: 360px) {
+  .search-desktop {
+    width: 80%;
+    margin-left: 8px;
+    display: block;
+  }
+}
+@media only screen and (max-width: 375px) {
+  .search-desktop {
+    width: 80%;
+    margin-left: 8px;
+    display: block;
+    padding-bottom: 20px;
+  }
+}

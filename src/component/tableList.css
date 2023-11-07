@@ -1,0 +1,66 @@
+.heading {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+th,
+td {
+  padding: 13px;
+}
+tr {
+  border-bottom: 1px solid #ded8d8;
+}
+.table-data {
+  display: flex;
+  justify-content: center;
+}
+.form-popup {
+  display: none;
+  bottom: 0;
+  right: 15px;
+  border: 3px solid #f1f1f1;
+  z-index: 9;
+}
+.form-container {
+  max-width: 300px;
+  padding: 10px;
+  background-color: white;
+}
+.show-popup {
+  display: block;
+}
+.hide-popup {
+  display: none;
+}
+.selected-row {
+  background-color: rgb(196, 188, 188);
+}
+.edit-btn {
+  background: transparent;
+  outline: none;
+  border: none;
+  color: gray;
+  cursor: pointer;
+}
+.delete-btn {
+  background: transparent;
+  outline: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+}
+.save-btn {
+  background: transparent;
+  outline: none;
+  border: none;
+  color: green;
+  cursor: pointer;
+}
+.cancel-btn {
+  background: transparent;
+  outline: none;
+  border: none;
+  color: black;
+  cursor: pointer;
+}

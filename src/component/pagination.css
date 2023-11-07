@@ -1,0 +1,104 @@
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  color: blue;
+  padding: 10px 40px;
+  border-radius: 6px;
+}
+ul {
+  margin: 20px 10px;
+  display: flex;
+  width: 70%;
+}
+ul li {
+  display: inline-block;
+  margin: 0 10px;
+  background: rgb(54, 54, 235);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-align: center;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 100;
+  line-height: 38px;
+  cursor: pointer;
+}
+
+ul li.active {
+  border-color: blue;
+  background-color: #fff;
+  color: blue;
+}
+.doubleArrowBack,
+.backButton,
+.nextButton,
+.lastPage {
+  display: inline-flex;
+  padding: 3px;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 500;
+  color: darkgray;
+  background: transparent;
+  outline: none;
+  border-color: rgb(245, 245, 245);
+  border-radius: 50%;
+  cursor: pointer;
+  margin: 2px;
+  background-color: rgb(255, 255, 255);
+}
+
+.lastPage.active {
+  border-color: blue;
+  background-color: rgb(54, 54, 235);
+  color: #fff;
+}
+.nextButton.active {
+  border-color: blue;
+  background-color: rgb(54, 54, 235);
+  color: #fff;
+}
+.backButton.active {
+  border-color: blue;
+  background-color: rgb(54, 54, 235);
+  color: #fff;
+}
+.doubleArrowBack.active {
+  border-color: blue;
+  background-color: rgb(54, 54, 235);
+  color: #fff;
+}
+.delete-all-btn {
+  background-color: deeppink;
+  color: #fff;
+  border-radius: 30px;
+  height: 2.5rem;
+  font-size: 1rem;
+  justify-items: center;
+  cursor: pointer;
+  outline: none;
+  border: none;
+}
+.btn {
+  width: 30%;
+}
+@media only screen and (max-width: 600px) {
+  .pagination {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  .delete-all-btn {
+    padding: 6px;
+  }
+  ul {
+    width: 100% !important;
+  }
+  .btn {
+    width: 100%;
+    position: sticky;
+  }
+}
