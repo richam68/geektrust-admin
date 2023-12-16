@@ -1,9 +1,9 @@
 import React, { memo } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import "./tableList.css";
+import "./table.css";
 
-const AdminPage = ({
+const Table = ({
   items,
   handleEdit,
   adminData,
@@ -11,12 +11,12 @@ const AdminPage = ({
   setOriginalData,
   setCurrentPage,
   setTotalItems,
-  selectedCheckboxes,
-  setselectedCheckboxes,
+  selectedCheckboxIds,
+  setSelectedCheckboxIds,
 }) => {
   //Each row consist checkbox for selecting them
   const handleCheckBox = (event, id) => {
-    setselectedCheckboxes((prevState) => ({
+    setSelectedCheckboxIds((prevState) => ({
       ...prevState,
       [id]: event,
     }));
@@ -32,11 +32,11 @@ const AdminPage = ({
   };
 
   return (
-    <tr className={selectedCheckboxes[items.id] ? "selected-row" : ""}>
+    <tr className={selectedCheckboxIds[items.id] ? "selected-row" : ""}>
       <td>
         <input
           type="checkbox"
-          checked={selectedCheckboxes[items.id] || false}
+          checked={selectedCheckboxIds[items.id] || false}
           onChange={(e) => handleCheckBox(e.target.checked, items.id)}
         />
       </td>
@@ -63,4 +63,4 @@ const AdminPage = ({
   );
 };
 
-export default memo(AdminPage);
+export default memo(Table);

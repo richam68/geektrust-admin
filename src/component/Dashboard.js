@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Fragment } from "react";
 import Search from "./Search";
 import Edit from "./Edit";
-import Table from "./TableList";
+import Table from "./Table";
 import Pagination from "./Pagination";
 import "./dashboard.css";
 
@@ -12,7 +12,6 @@ export default function Dashboard() {
   const POST_PER_PAGE = 10;
 
   const [originalData, setOriginalData] = useState([]);
-  const [search, setSearch] = useState("");
   const [adminData, setAdminData] = useState([]);
 
   const [paginatedData, setPaginatedData] = useState([]);
@@ -22,8 +21,8 @@ export default function Dashboard() {
   const [isEdit, setIsEdit] = useState(null);
   const [editData, setEditData] = useState({});
 
-  const [selectAllCheckbox, setSelectAllCheckbox] = useState(false);
-  const [selectedCheckboxes, setselectedCheckboxes] = useState([]);
+  const [isAllSelected, setAllSelected] = useState(false);
+  const [selectedCheckboxIds, setSelectedCheckboxIds] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -34,6 +33,7 @@ export default function Dashboard() {
     setPaginatedData(currentPost);
   }, [currentPage, adminData]);
 
+  //fetching members list
   async function fetchData() {
     try {
       const response = await fetch(url);
@@ -42,10 +42,11 @@ export default function Dashboard() {
       setOriginalData(data);
       setTotalItems(data.length);
     } catch (error) {
-      console.error("Error Found", error);
+      console.error("Error fetching data:", error);
     }
   }
 
+  //pagination function
   function paginateFunction(adminData, currentPage, POST_PER_PAGE) {
     const indexOfFirstPost = (currentPage - 1) * POST_PER_PAGE;
     const indexOfLastPost = indexOfFirstPost + POST_PER_PAGE;
@@ -54,37 +55,17 @@ export default function Dashboard() {
   //changing page according to page number
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  //search functionality using any key
-  const handleSearch = async (e) => {
-    let value = e.target.value;
-    setSearch(value);
-
-    let filteredDataValue = originalData.filter(
-      (item) =>
-        item.name.toLowerCase().includes(value.toLowerCase()) ||
-        item.email.toLowerCase().includes(value.toLowerCase()) ||
-        item.role.toLowerCase().includes(value.toLowerCase())
-    );
-
-    setAdminData(filteredDataValue);
-    setCurrentPage(1);
-    setTotalItems(filteredDataValue.length);
-  };
-
   //Edit data
   const handleEdit = (id) => {
-    console.log("handle edit dashboard page", id);
     setEditData(paginatedData.find((ele) => ele.id === id));
     setIsEdit(id);
   };
 
-  // save button
+  // save button 
   const handleSave = (id) => {
-    console.log(id);
-    let editingData = adminData.map((element) => {
-      return element.id === id ? { ...element, ...editData } : element;
+    let editingData = adminData.map((item) => {
+      return item.id === id ? { ...item, ...editData } : item;
     });
-
     setAdminData(editingData);
     setOriginalData(editingData);
     setCurrentPage(currentPage);
@@ -95,20 +76,21 @@ export default function Dashboard() {
 
   //selecting all checkboxes
   const handleCheckbox = (event) => {
-    setSelectAllCheckbox(event);
+    setAllSelected(event);
 
-    const checkboxValues = paginatedData.reduce((acc, value) => {
-      acc[value.id] = event;
-      return acc;
-    }, {});
-
-    setselectedCheckboxes(checkboxValues);
+    const checkboxValues = paginatedData.reduce(
+      (checkboxState, currentItem) => {
+        checkboxState[currentItem.id] = event;
+        return checkboxState;
+      },{}
+    );
+    setSelectedCheckboxIds(checkboxValues);
   };
 
   //Delete selected
   const deleteSelected = () => {
-    let selectedData = Object.keys(selectedCheckboxes).filter(
-      (id) => selectedCheckboxes[id]
+    let selectedData = Object.keys(selectedCheckboxIds).filter(
+      (id) => selectedCheckboxIds[id]
     );
     if (selectedData.length === 0) return;
 
@@ -116,9 +98,9 @@ export default function Dashboard() {
       (element) => !selectedData.includes(element.id)
     );
 
-    if (selectAllCheckbox) {
-      setselectedCheckboxes({});
-      setSelectAllCheckbox(false);
+    if (isAllSelected) {
+      setSelectedCheckboxIds({});
+      setAllSelected(false);
     }
 
     setCurrentPage(1);
@@ -130,15 +112,19 @@ export default function Dashboard() {
   return (
     <div className="container">
       <div className="content text-white">
-        <Search search={search} handleSearch={handleSearch} />
-
+        <Search
+          originalData={originalData}
+          setAdminData={setAdminData}
+          setCurrentPage={setCurrentPage}
+          setTotalItems={setTotalItems}
+        />
         <table style={{ width: "100%", borderCollapse: " collapse" }}>
           <thead>
             <tr>
               <th>
                 <input
                   type="checkbox"
-                  checked={selectAllCheckbox}
+                  checked={isAllSelected}
                   onChange={(e) => handleCheckbox(e.target.checked)}
                 />
               </th>
@@ -151,7 +137,7 @@ export default function Dashboard() {
           <tbody>
             {paginatedData.map((items) => {
               return (
-                <Fragment>
+                <Fragment key={items.id}>
                   {isEdit === items.id ? (
                     <Edit
                       editData={editData}
@@ -168,8 +154,8 @@ export default function Dashboard() {
                       setOriginalData={setOriginalData}
                       setCurrentPage={setCurrentPage}
                       setTotalItems={setTotalItems}
-                      selectedCheckboxes={selectedCheckboxes}
-                      setselectedCheckboxes={setselectedCheckboxes}
+                      selectedCheckboxIds={selectedCheckboxIds}
+                      setSelectedCheckboxIds={setSelectedCheckboxIds}
                     />
                   )}
                 </Fragment>
