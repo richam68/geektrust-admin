@@ -1,17 +1,15 @@
-import React from "react";
+import React, {memo} from "react";
 import DoneIcon from "@mui/icons-material/Done";
 
 const EditData = ({ editData, setEditData, handleSave }) => {
-  console.log(">>> edit page", editData);
 
   const handleChange = (e) => {
-    console.log(">>> handle change", e);
+    // console.log(">>> handle change", e);
     let fieldName = e.target.getAttribute("name");
     let fieldValue = e.target.value;
 
     const newData = { ...editData };
     newData[fieldName] = fieldValue;
-
     setEditData(newData);
   };
 
@@ -57,4 +55,4 @@ const EditData = ({ editData, setEditData, handleSave }) => {
   );
 };
 
-export default EditData;
+export default memo(EditData);

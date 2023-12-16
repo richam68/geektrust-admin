@@ -1,6 +1,5 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState } from "react";
 import Search from "./Search";
-import Edit from "./Edit";
 import Table from "./Table";
 import Pagination from "./Pagination";
 import "./dashboard.css";
@@ -61,31 +60,42 @@ export default function Dashboard() {
     setIsEdit(id);
   };
 
-  // save button 
+  // save button
   const handleSave = (id) => {
-    let editingData = adminData.map((item) => {
+    let updatedData = adminData.map((item) => {
       return item.id === id ? { ...item, ...editData } : item;
     });
-    setAdminData(editingData);
-    setOriginalData(editingData);
+    setAdminData(updatedData);
+    setOriginalData(updatedData);
     setCurrentPage(currentPage);
-    setTotalItems(editingData.length);
+    setTotalItems(updatedData.length);
     setIsEdit(null);
     setEditData({});
   };
 
-  //selecting all checkboxes
-  const handleCheckbox = (event) => {
-    setAllSelected(event);
+ //selecting all checkboxes
+ const handleAllCheckbox = (event) => {
+  setAllSelected(event);
 
-    const checkboxValues = paginatedData.reduce(
-      (checkboxState, currentItem) => {
-        checkboxState[currentItem.id] = event;
-        return checkboxState;
-      },{}
-    );
-    setSelectedCheckboxIds(checkboxValues);
+  const checkboxValues = paginatedData.reduce(
+    (checkboxState, currentItem) => {
+      checkboxState[currentItem.id] = event;
+      return checkboxState;
+    },
+    {}
+  );
+  setSelectedCheckboxIds(checkboxValues);
+};
+
+  //deleting each row using delete button
+  const handleDelete = async (id) => {
+    const deletedData = adminData.filter((item) => item.id !== id);
+    setAdminData(deletedData);
+    setOriginalData(deletedData);
+    setCurrentPage(1);
+    setTotalItems(deletedData.length);
   };
+   
 
   //Delete selected
   const deleteSelected = () => {
@@ -118,51 +128,19 @@ export default function Dashboard() {
           setCurrentPage={setCurrentPage}
           setTotalItems={setTotalItems}
         />
-        <table style={{ width: "100%", borderCollapse: " collapse" }}>
-          <thead>
-            <tr>
-              <th>
-                <input
-                  type="checkbox"
-                  checked={isAllSelected}
-                  onChange={(e) => handleCheckbox(e.target.checked)}
-                />
-              </th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedData.map((items) => {
-              return (
-                <Fragment key={items.id}>
-                  {isEdit === items.id ? (
-                    <Edit
-                      editData={editData}
-                      setEditData={setEditData}
-                      handleSave={handleSave}
-                    />
-                  ) : (
-                    <Table
-                      key={items.id}
-                      items={items}
-                      handleEdit={handleEdit}
-                      adminData={adminData}
-                      setAdminData={setAdminData}
-                      setOriginalData={setOriginalData}
-                      setCurrentPage={setCurrentPage}
-                      setTotalItems={setTotalItems}
-                      selectedCheckboxIds={selectedCheckboxIds}
-                      setSelectedCheckboxIds={setSelectedCheckboxIds}
-                    />
-                  )}
-                </Fragment>
-              );
-            })}
-          </tbody>
-        </table>
+        <Table
+          paginatedData={paginatedData}
+          isAllSelected={isAllSelected}
+          handleAllCheckbox={handleAllCheckbox}
+          isEdit={isEdit}
+          editData={editData}
+          setEditData={setEditData}
+          handleEdit={handleEdit}
+          handleSave={handleSave}
+          handleDelete={handleDelete}
+          selectedCheckboxIds={selectedCheckboxIds}
+          setSelectedCheckboxIds={setSelectedCheckboxIds}
+        />
 
         <Pagination
           postPerPage={POST_PER_PAGE}
